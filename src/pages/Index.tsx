@@ -72,7 +72,7 @@ const SERVICES = [
     icon: "RefreshCw",
     title: "Редизайн скина",
     desc: "Обновим ваш старый скин: улучшим детали, цветовую схему и текстуры.",
-    price: "от 99 ₽",
+    price: "от 50 ₽",
     color: "gold",
   },
 ];
@@ -135,15 +135,8 @@ function CubeDecor({
 export default function Index() {
   const [orderForm, setOrderForm] = useState({ name: "", discord: "", type: "", desc: "" });
   const [orderSent, setOrderSent] = useState(false);
-  const [activeFilter, setActiveFilter] = useState("Все");
   const [menuOpen, setMenuOpen] = useState(false);
   const [clientCount, setClientCount] = useState(100);
-
-  const filters = ["Все", "Фэнтези", "Sci-Fi", "Персонажи", "Современный"];
-  const filtered =
-    activeFilter === "Все"
-      ? PORTFOLIO_IMAGES
-      : PORTFOLIO_IMAGES.filter((p) => p.category === activeFilter);
 
   function scrollTo(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -186,7 +179,6 @@ export default function Index() {
           <div className="hidden md:flex items-center gap-8">
             {[
               ["Услуги", "services"],
-              ["Портфолио", "portfolio"],
               ["Команда", "team"],
             ].map(([label, id]) => (
               <button
@@ -213,7 +205,7 @@ export default function Index() {
             style={{ background: "var(--pf-surface)", borderTop: "1px solid var(--pf-border)", padding: "16px 24px" }}
             className="flex flex-col gap-4 md:hidden"
           >
-            {[["Услуги", "services"], ["Портфолио", "portfolio"], ["Команда", "team"]].map(([label, id]) => (
+            {[["Услуги", "services"], ["Команда", "team"]].map(([label, id]) => (
               <button
                 key={id}
                 onClick={() => scrollTo(id)}
@@ -246,17 +238,15 @@ export default function Index() {
               <span style={{ color: "var(--pf-green)" }}>ТВОЯ ЛЕГЕНДА</span>
             </h1>
             <p style={{ color: "var(--pf-text-muted)", fontSize: 17, lineHeight: 1.7, marginBottom: 36, fontFamily: "'IBM Plex Sans', sans-serif" }}>
-              Создаём уникальные скины для Minecraft с 2019 года. Каждый пиксель — под твою личность.
-              Более 5400 довольных клиентов по всей России.
+              Создаём уникальные скины для Minecraft с 2026 года. Каждый пиксель — под твою личность.
+              Более 100 довольных клиентов по всей России.
             </p>
             <div className="flex flex-wrap gap-4">
               <button onClick={() => scrollTo("order")} className="btn-primary">
                 <Icon name="Zap" size={16} />
                 Заказать скин
               </button>
-              <button onClick={() => scrollTo("portfolio")} className="btn-outline">
-                Смотреть работы
-              </button>
+
             </div>
 
             <div className="grid grid-cols-3 gap-6 mt-12">
@@ -382,74 +372,6 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ─── PORTFOLIO ─── */}
-      <section id="portfolio" style={{ padding: "80px 0" }}>
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="mb-10">
-            <div className="pf-badge mb-3" style={{ display: "inline-block" }}>Портфолио</div>
-            <h2 className="section-title" style={{ fontSize: "clamp(28px, 4vw, 44px)", marginBottom: 24 }}>
-              НАШИ РАБОТЫ
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {filters.map((f) => (
-                <button
-                  key={f}
-                  onClick={() => setActiveFilter(f)}
-                  style={{
-                    fontFamily: "'Oswald', sans-serif", fontSize: 13, letterSpacing: "0.08em",
-                    textTransform: "uppercase", padding: "6px 18px",
-                    border: `2px solid ${activeFilter === f ? "var(--pf-green)" : "var(--pf-border)"}`,
-                    color: activeFilter === f ? "var(--pf-green)" : "var(--pf-text-muted)",
-                    background: activeFilter === f ? "rgba(74,222,128,0.08)" : "transparent",
-                    cursor: "pointer", transition: "all 0.15s",
-                  }}
-                >
-                  {f}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {filtered.map((item, i) => (
-              <div
-                key={item.id}
-                className="animate-fade-up"
-                style={{
-                  position: "relative", overflow: "hidden",
-                  border: "2px solid var(--pf-border)",
-                  animationDelay: `${i * 0.07}s`,
-                  cursor: "pointer",
-                }}
-              >
-                <div style={{ aspectRatio: "1", overflow: "hidden" }}>
-                  <img
-                    src={item.img}
-                    alt={item.title}
-                    style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.4s ease" }}
-                    onMouseEnter={(e) => ((e.target as HTMLImageElement).style.transform = "scale(1.08)")}
-                    onMouseLeave={(e) => ((e.target as HTMLImageElement).style.transform = "scale(1)")}
-                  />
-                </div>
-                <div style={{ padding: "14px 16px", background: "var(--pf-surface2)" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <div>
-                      <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 15, color: "var(--pf-text)" }}>
-                        {item.title}
-                      </div>
-                      <div style={{ color: "var(--pf-text-muted)", fontSize: 12, marginTop: 2 }}>{item.category}</div>
-                    </div>
-                    <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 700, color: "var(--pf-gold)", fontSize: 16 }}>
-                      {item.price}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ─── TEAM ─── */}
       <section id="team" style={{ padding: "80px 0", background: "var(--pf-surface)" }}>
         <div className="max-w-6xl mx-auto px-6">
@@ -471,9 +393,9 @@ export default function Index() {
               <strong style={{ color: "var(--pf-text)" }}>PixelForge</strong> — студия, которую основали три художника, фанатевших от Minecraft с детства.
               Мы помним, каково это — хотеть уникальный скин, а найти только шаблоны. Поэтому создали студию,
               где каждый скин рисуется вручную: без генераторов, без шаблонов, только живой арт.
-              За 5 лет работы мы выпустили более{" "}
-              <strong style={{ color: "var(--pf-green)" }}>12 000 скинов</strong> и
-              завоевали репутацию самой надёжной студии в СНГ.
+              С 2026 года мы создаём скины вручную — без генераторов, без шаблонов.
+              Уже доверились нам более{" "}
+              <strong style={{ color: "var(--pf-green)" }}>100 клиентов</strong> по всей России.
             </p>
           </div>
 
