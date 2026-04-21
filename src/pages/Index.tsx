@@ -132,8 +132,16 @@ function CubeDecor({
   );
 }
 
+const LABEL_STYLE = {
+  display: "block", fontFamily: "'Oswald', sans-serif", fontSize: 12,
+  letterSpacing: "0.1em", color: "var(--pf-text-muted)", marginBottom: 8, textTransform: "uppercase" as const,
+};
+
 export default function Index() {
-  const [orderForm, setOrderForm] = useState({ name: "", discord: "", type: "", desc: "" });
+  const [modalOpen, setModalOpen] = useState(false);
+  const [orderForm, setOrderForm] = useState({
+    nick: "", type: "", desc: "", deadline: "", tg: "", ds: "", vk: "",
+  });
   const [orderSent, setOrderSent] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [clientCount, setClientCount] = useState(100);
@@ -141,6 +149,18 @@ export default function Index() {
   function scrollTo(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     setMenuOpen(false);
+  }
+
+  function openModal() {
+    setModalOpen(true);
+    setOrderSent(false);
+    setOrderForm({ nick: "", type: "", desc: "", deadline: "", tg: "", ds: "", vk: "" });
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal() {
+    setModalOpen(false);
+    document.body.style.overflow = "";
   }
 
   function handleSubmit(e: React.FormEvent) {
@@ -190,7 +210,7 @@ export default function Index() {
                 {label}
               </button>
             ))}
-            <button onClick={() => scrollTo("order")} className="btn-primary" style={{ padding: "8px 24px", fontSize: 13 }}>
+            <button onClick={openModal} className="btn-primary" style={{ padding: "8px 24px", fontSize: 13 }}>
               Заказать скин
             </button>
           </div>
@@ -214,7 +234,7 @@ export default function Index() {
                 {label}
               </button>
             ))}
-            <button onClick={() => scrollTo("order")} className="btn-primary" style={{ width: "100%", justifyContent: "center" }}>
+            <button onClick={openModal} className="btn-primary" style={{ width: "100%", justifyContent: "center" }}>
               Заказать скин
             </button>
           </div>
@@ -242,7 +262,7 @@ export default function Index() {
               Более 100 довольных клиентов по всей России.
             </p>
             <div className="flex flex-wrap gap-4">
-              <button onClick={() => scrollTo("order")} className="btn-primary">
+              <button onClick={openModal} className="btn-primary">
                 <Icon name="Zap" size={16} />
                 Заказать скин
               </button>
@@ -448,132 +468,133 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ─── ORDER FORM ─── */}
-      <section id="order" style={{ padding: "80px 0", background: "var(--pf-surface)" }}>
-        <div className="max-w-2xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <div className="pf-badge mb-3" style={{ display: "inline-block" }}>Заказ</div>
-            <h2 className="section-title" style={{ fontSize: "clamp(28px, 4vw, 44px)", marginBottom: 12 }}>
-              ЗАКАЗАТЬ СКИН
-            </h2>
-            <p style={{ color: "var(--pf-text-muted)", fontSize: 15, fontFamily: "'IBM Plex Sans', sans-serif" }}>
-              Заполните форму — ответим в Discord в течение 1 часа
-            </p>
+      {/* ─── MODAL ─── */}
+      {modalOpen && (
+        <div
+          onClick={closeModal}
+          style={{
+            position: "fixed", inset: 0, zIndex: 100,
+            background: "rgba(0,0,0,0.75)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            padding: "16px",
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "var(--pf-surface)",
+              border: "2px solid var(--pf-green)",
+              boxShadow: "8px 8px 0 rgba(74,222,128,0.15)",
+              width: "100%", maxWidth: 560,
+              maxHeight: "90vh", overflowY: "auto",
+              padding: "36px 32px",
+              position: "relative",
+            }}
+          >
+            {/* Close */}
+            <button
+              onClick={closeModal}
+              style={{
+                position: "absolute", top: 16, right: 16,
+                background: "transparent", border: "none",
+                color: "var(--pf-text-muted)", cursor: "pointer",
+              }}
+            >
+              <Icon name="X" size={20} />
+            </button>
+
+            {orderSent ? (
+              <div style={{ textAlign: "center", padding: "32px 0" }}>
+                <div style={{ fontSize: 64, marginBottom: 16 }}>⛏️</div>
+                <h3 style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 700, fontSize: 28, color: "var(--pf-green)", marginBottom: 8 }}>
+                  ЗАЯВКА ПРИНЯТА!
+                </h3>
+                <p style={{ color: "var(--pf-text-muted)", fontFamily: "'IBM Plex Sans', sans-serif", marginBottom: 24 }}>
+                  Скоро свяжемся с тобой по указанным контактам.
+                </p>
+                <button onClick={closeModal} className="btn-primary" style={{ justifyContent: "center" }}>
+                  Закрыть
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="pf-badge mb-3" style={{ display: "inline-block" }}>Заказ</div>
+                <h2 className="section-title" style={{ fontSize: 28, marginBottom: 4 }}>ЗАКАЗАТЬ СКИН</h2>
+                <p style={{ color: "var(--pf-text-muted)", fontSize: 13, fontFamily: "'IBM Plex Sans', sans-serif", marginBottom: 24 }}>
+                  Заполни форму — свяжемся в течение нескольких часов
+                </p>
+
+                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+
+                  {/* Ник/имя */}
+                  <div>
+                    <label style={LABEL_STYLE}>Ник / Имя *</label>
+                    <input required className="pf-input" placeholder="Твой ник или имя"
+                      value={orderForm.nick} onChange={(e) => setOrderForm({ ...orderForm, nick: e.target.value })} />
+                  </div>
+
+                  {/* Выбор товара */}
+                  <div>
+                    <label style={LABEL_STYLE}>Выбор услуги *</label>
+                    <select required className="pf-input" value={orderForm.type}
+                      onChange={(e) => setOrderForm({ ...orderForm, type: e.target.value })}
+                      style={{ cursor: "pointer" }}>
+                      <option value="" style={{ background: "var(--pf-surface2)" }}>Выберите услугу</option>
+                      <option value="simple" style={{ background: "var(--pf-surface2)" }}>Простой скин — от 50 ₽</option>
+                      <option value="custom" style={{ background: "var(--pf-surface2)" }}>Кастомный скин — от 100 ₽</option>
+                      <option value="pack" style={{ background: "var(--pf-surface2)" }}>Пакет скинов — от 200 ₽</option>
+                      <option value="redesign" style={{ background: "var(--pf-surface2)" }}>Редизайн скина — от 50 ₽</option>
+                    </select>
+                  </div>
+
+                  {/* Описание */}
+                  <div>
+                    <label style={LABEL_STYLE}>Описание идеи *</label>
+                    <textarea required className="pf-input" rows={4}
+                      placeholder="Стиль, цвета, образ, референсы..."
+                      value={orderForm.desc} onChange={(e) => setOrderForm({ ...orderForm, desc: e.target.value })}
+                      style={{ resize: "vertical" }} />
+                  </div>
+
+                  {/* Сроки */}
+                  <div>
+                    <label style={LABEL_STYLE}>Желаемый срок</label>
+                    <input className="pf-input" placeholder="Например: до 25 апреля, срочно, не горит"
+                      value={orderForm.deadline} onChange={(e) => setOrderForm({ ...orderForm, deadline: e.target.value })} />
+                  </div>
+
+                  {/* Контакты */}
+                  <div style={{ borderTop: "1px solid var(--pf-border)", paddingTop: 16 }}>
+                    <p style={{ ...LABEL_STYLE, marginBottom: 12 }}>Контакты (заполни хотя бы один) *</p>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <span style={{ color: "var(--pf-green)", fontSize: 18, width: 24, textAlign: "center" }}>✈️</span>
+                        <input className="pf-input" placeholder="Telegram: @username"
+                          value={orderForm.tg} onChange={(e) => setOrderForm({ ...orderForm, tg: e.target.value })} />
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <span style={{ color: "#5865F2", fontSize: 18, width: 24, textAlign: "center" }}>💬</span>
+                        <input className="pf-input" placeholder="Discord: username#0000"
+                          value={orderForm.ds} onChange={(e) => setOrderForm({ ...orderForm, ds: e.target.value })} />
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <span style={{ color: "#4C75A3", fontSize: 18, width: 24, textAlign: "center" }}>🔷</span>
+                        <input className="pf-input" placeholder="ВКонтакте: vk.com/id или @username"
+                          value={orderForm.vk} onChange={(e) => setOrderForm({ ...orderForm, vk: e.target.value })} />
+                      </div>
+                    </div>
+                  </div>
+
+                  <button type="submit" className="btn-primary" style={{ width: "100%", justifyContent: "center", fontSize: 15, marginTop: 4 }}>
+                    <Icon name="Send" size={16} />
+                    Отправить заявку
+                  </button>
+                </form>
+              </>
+            )}
           </div>
-
-          {orderSent ? (
-            <div
-              style={{
-                textAlign: "center", padding: "60px 32px",
-                border: "2px solid var(--pf-green)",
-                background: "rgba(74,222,128,0.05)",
-              }}
-            >
-              <div style={{ fontSize: 64, marginBottom: 16 }}>⛏️</div>
-              <h3 style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 700, fontSize: 28, color: "var(--pf-green)", marginBottom: 8 }}>
-                ЗАЯВКА ПРИНЯТА!
-              </h3>
-              <p style={{ color: "var(--pf-text-muted)", fontFamily: "'IBM Plex Sans', sans-serif" }}>
-                Мы напишем вам в Discord в ближайшее время.
-              </p>
-            </div>
-          ) : (
-            <form
-              onSubmit={handleSubmit}
-              style={{
-                background: "var(--pf-surface2)", border: "2px solid var(--pf-border)",
-                padding: "40px 36px",
-              }}
-            >
-              <div className="grid md:grid-cols-2 gap-4 mb-4">
-                <div>
-                  <label
-                    style={{
-                      display: "block", fontFamily: "'Oswald', sans-serif", fontSize: 12,
-                      letterSpacing: "0.1em", color: "var(--pf-text-muted)", marginBottom: 8, textTransform: "uppercase",
-                    }}
-                  >
-                    Ваше имя *
-                  </label>
-                  <input
-                    required
-                    className="pf-input"
-                    placeholder="Как вас зовут?"
-                    value={orderForm.name}
-                    onChange={(e) => setOrderForm({ ...orderForm, name: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <label
-                    style={{
-                      display: "block", fontFamily: "'Oswald', sans-serif", fontSize: 12,
-                      letterSpacing: "0.1em", color: "var(--pf-text-muted)", marginBottom: 8, textTransform: "uppercase",
-                    }}
-                  >
-                    Discord / VK *
-                  </label>
-                  <input
-                    required
-                    className="pf-input"
-                    placeholder="username#0000"
-                    value={orderForm.discord}
-                    onChange={(e) => setOrderForm({ ...orderForm, discord: e.target.value })}
-                  />
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <label
-                  style={{
-                    display: "block", fontFamily: "'Oswald', sans-serif", fontSize: 12,
-                    letterSpacing: "0.1em", color: "var(--pf-text-muted)", marginBottom: 8, textTransform: "uppercase",
-                  }}
-                >
-                  Тип заказа *
-                </label>
-                <select
-                  required
-                  className="pf-input"
-                  value={orderForm.type}
-                  onChange={(e) => setOrderForm({ ...orderForm, type: e.target.value })}
-                  style={{ cursor: "pointer" }}
-                >
-                  <option value="" style={{ background: "var(--pf-surface2)" }}>Выберите услугу</option>
-                  <option value="simple" style={{ background: "var(--pf-surface2)" }}>Простой скин — от 50 ₽</option>
-                  <option value="custom" style={{ background: "var(--pf-surface2)" }}>Кастомный скин — от 100 ₽</option>
-                  <option value="pack" style={{ background: "var(--pf-surface2)" }}>Пакет скинов — от 200 ₽</option>
-                  <option value="redesign" style={{ background: "var(--pf-surface2)" }}>Редизайн скина — от 99 ₽</option>
-                </select>
-              </div>
-
-              <div className="mb-8">
-                <label
-                  style={{
-                    display: "block", fontFamily: "'Oswald', sans-serif", fontSize: 12,
-                    letterSpacing: "0.1em", color: "var(--pf-text-muted)", marginBottom: 8, textTransform: "uppercase",
-                  }}
-                >
-                  Описание идеи *
-                </label>
-                <textarea
-                  required
-                  className="pf-input"
-                  rows={5}
-                  placeholder="Расскажите о вашем персонаже: стиль, цвета, образ, референсы..."
-                  value={orderForm.desc}
-                  onChange={(e) => setOrderForm({ ...orderForm, desc: e.target.value })}
-                  style={{ resize: "vertical" }}
-                />
-              </div>
-
-              <button type="submit" className="btn-primary" style={{ width: "100%", justifyContent: "center", fontSize: 15 }}>
-                <Icon name="Send" size={16} />
-                Отправить заявку
-              </button>
-            </form>
-          )}
         </div>
-      </section>
+      )}
 
       {/* ─── FOOTER ─── */}
       <footer style={{ borderTop: "2px solid var(--pf-border)", padding: "32px 24px" }}>
