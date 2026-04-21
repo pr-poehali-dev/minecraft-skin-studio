@@ -48,10 +48,17 @@ const PORTFOLIO_IMAGES = [
 
 const SERVICES = [
   {
+    icon: "Sparkles",
+    title: "Простой скин",
+    desc: "Базовый скин без сложных деталей. Быстро и аккуратно — идеально для старта.",
+    price: "от 50 ₽",
+    color: "green",
+  },
+  {
     icon: "Brush",
     title: "Кастомный скин",
     desc: "Уникальный дизайн по вашим пожеланиям. Полное воплощение идеи в пикселях.",
-    price: "от 199 ₽",
+    price: "от 100 ₽",
     color: "green",
   },
   {
@@ -130,6 +137,7 @@ export default function Index() {
   const [orderSent, setOrderSent] = useState(false);
   const [activeFilter, setActiveFilter] = useState("Все");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [clientCount, setClientCount] = useState(100);
 
   const filters = ["Все", "Фэнтези", "Sci-Fi", "Персонажи", "Современный"];
   const filtered =
@@ -145,6 +153,7 @@ export default function Index() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setOrderSent(true);
+    setClientCount((c) => c + 1);
   }
 
   return (
@@ -252,7 +261,7 @@ export default function Index() {
 
             <div className="grid grid-cols-3 gap-6 mt-12">
               {[
-                { num: "5400+", label: "клиентов" },
+                { num: `${clientCount}`, label: "клиентов" },
                 { num: "48ч", label: "срок сдачи" },
                 { num: "4.9★", label: "рейтинг" },
               ].map(({ num, label }) => (
@@ -292,7 +301,7 @@ export default function Index() {
                   fontSize: 13, padding: "8px 16px", letterSpacing: "0.08em",
                 }}
               >
-                ОТ 199 ₽
+                ОТ 50 ₽
               </div>
             </div>
           </div>
@@ -608,9 +617,9 @@ export default function Index() {
                   style={{ cursor: "pointer" }}
                 >
                   <option value="" style={{ background: "var(--pf-surface2)" }}>Выберите услугу</option>
-                  <option value="custom" style={{ background: "var(--pf-surface2)" }}>Кастомный скин — от 199 ₽</option>
-                  <option value="pack" style={{ background: "var(--pf-surface2)" }}>Пакет скинов — от 499 ₽</option>
-                  <option value="vip" style={{ background: "var(--pf-surface2)" }}>VIP-коллекция — от 1490 ₽</option>
+                  <option value="simple" style={{ background: "var(--pf-surface2)" }}>Простой скин — от 50 ₽</option>
+                  <option value="custom" style={{ background: "var(--pf-surface2)" }}>Кастомный скин — от 100 ₽</option>
+                  <option value="pack" style={{ background: "var(--pf-surface2)" }}>Пакет скинов — от 200 ₽</option>
                   <option value="redesign" style={{ background: "var(--pf-surface2)" }}>Редизайн скина — от 99 ₽</option>
                 </select>
               </div>
