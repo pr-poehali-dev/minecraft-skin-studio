@@ -79,25 +79,11 @@ const SERVICES = [
 
 const TEAM = [
   {
-    name: "Алексей «PixelKing»",
-    role: "Арт-директор",
-    exp: "5 лет опыта",
-    skins: "2400+ скинов",
-    emoji: "👑",
-  },
-  {
-    name: "Мария «BlockArtist»",
-    role: "Главный дизайнер",
-    exp: "3 года опыта",
-    skins: "1200+ скинов",
-    emoji: "🎨",
-  },
-  {
-    name: "Дмитрий «CubeWizard»",
-    role: "Специалист по эффектам",
-    exp: "4 года опыта",
-    skins: "1800+ скинов",
-    emoji: "✨",
+    name: "Виктор",
+    role: "Глав-Скинодел",
+    exp: "1 год опыта",
+    skins: "100 работ",
+    emoji: "⚒️",
   },
 ];
 
@@ -193,7 +179,7 @@ export default function Index() {
                 background: "var(--pf-green)", marginBottom: 2,
               }}
             />
-            PIXEL<span style={{ color: "var(--pf-green)" }}>FORGE</span>
+            SKIN<span style={{ color: "var(--pf-green)" }}>CRAFT</span>
           </button>
 
           <div className="hidden md:flex items-center gap-8">
@@ -251,7 +237,7 @@ export default function Index() {
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
           <div className="animate-fade-up">
             <div className="pf-badge mb-6" style={{ display: "inline-block" }}>
-              🎮 Студия скинов #1 в России
+              🎮 SkinCraft — скины с душой
             </div>
             <h1 className="section-title" style={{ fontSize: "clamp(42px, 6vw, 72px)", lineHeight: 1.05, marginBottom: 24 }}>
               ТВОЙ СКИН —<br />
@@ -410,23 +396,21 @@ export default function Index() {
             }}
           >
             <p style={{ color: "var(--pf-text-muted)", fontSize: 16, lineHeight: 1.8, fontFamily: "'IBM Plex Sans', sans-serif" }}>
-              <strong style={{ color: "var(--pf-text)" }}>PixelForge</strong> — студия, которую основали три художника, фанатевших от Minecraft с детства.
-              Мы помним, каково это — хотеть уникальный скин, а найти только шаблоны. Поэтому создали студию,
-              где каждый скин рисуется вручную: без генераторов, без шаблонов, только живой арт.
-              С 2026 года мы создаём скины вручную — без генераторов, без шаблонов.
+              <strong style={{ color: "var(--pf-text)" }}>SkinCraft</strong> — студия одного мастера, который делает скины с душой.
+              С 2026 года каждый скин рисуется вручную — без генераторов, без шаблонов, только живой арт.
               Уже доверились нам более{" "}
               <strong style={{ color: "var(--pf-green)" }}>100 клиентов</strong> по всей России.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="flex justify-center">
             {TEAM.map((member) => (
               <div
                 key={member.name}
                 style={{
                   background: "var(--pf-surface2)", border: "2px solid var(--pf-border)",
-                  padding: "32px 24px", textAlign: "center",
-                  transition: "border-color 0.2s",
+                  padding: "40px 48px", textAlign: "center",
+                  transition: "border-color 0.2s", maxWidth: 320, width: "100%",
                 }}
                 onMouseEnter={(e) => ((e.currentTarget as HTMLDivElement).style.borderColor = "var(--pf-green)")}
                 onMouseLeave={(e) => ((e.currentTarget as HTMLDivElement).style.borderColor = "var(--pf-border)")}
@@ -600,13 +584,13 @@ export default function Index() {
       <footer style={{ borderTop: "2px solid var(--pf-border)", padding: "32px 24px" }}>
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 700, fontSize: 20 }}>
-            PIXEL<span style={{ color: "var(--pf-green)" }}>FORGE</span>
+            SKIN<span style={{ color: "var(--pf-green)" }}>CRAFT</span>
           </div>
           <div style={{ color: "var(--pf-text-muted)", fontSize: 13, fontFamily: "'IBM Plex Sans', sans-serif" }}>
-            © 2024 PixelForge Studio. Все скины созданы вручную.
+            © 2026 SkinCraft. Все скины созданы вручную.
           </div>
           <div className="flex gap-6">
-            {[["Услуги", "services"], ["Заказать", "order"]].map(([label, id]) => (
+            {[["Услуги", "services"], ["Команда", "team"]].map(([label, id]) => (
               <button
                 key={id}
                 onClick={() => scrollTo(id)}
