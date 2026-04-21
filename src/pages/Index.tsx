@@ -585,7 +585,7 @@ export default function Index() {
             © 2024 PixelForge Studio. Все скины созданы вручную.
           </div>
           <div className="flex gap-6">
-            {[["Услуги", "services"], ["Портфолио", "portfolio"], ["Заказать", "order"]].map(([label, id]) => (
+            {[["Услуги", "services"], ["Заказать", "order"]].map(([label, id]) => (
               <button
                 key={id}
                 onClick={() => scrollTo(id)}
