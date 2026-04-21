@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Icon from "@/components/ui/icon";
 
 const PORTFOLIO_IMAGES = [
@@ -132,6 +132,33 @@ export default function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [clientCount, setClientCount] = useState(100);
 
+  // Chat state
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatMessages, setChatMessages] = useState<{ from: "user" | "master"; text: string; time: string }[]>([
+    { from: "master", text: "Привет! 👋 Я Виктор, мастер SkinCraft. Чем могу помочь?", time: "сейчас" },
+  ]);
+  const [chatInput, setChatInput] = useState("");
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (chatOpen) chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatMessages, chatOpen]);
+
+  function sendMessage(e: React.FormEvent) {
+    e.preventDefault();
+    if (!chatInput.trim()) return;
+    const now = new Date().toLocaleTimeString("ru", { hour: "2-digit", minute: "2-digit" });
+    setChatMessages((m) => [...m, { from: "user", text: chatInput.trim(), time: now }]);
+    setChatInput("");
+    setTimeout(() => {
+      setChatMessages((m) => [...m, {
+        from: "master",
+        text: "Получил твоё сообщение! Отвечу в ближайшее время. Если срочно — пиши в Telegram @xezzze228 🔥",
+        time: new Date().toLocaleTimeString("ru", { hour: "2-digit", minute: "2-digit" }),
+      }]);
+    }, 1000);
+  }
+
   function scrollTo(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     setMenuOpen(false);
@@ -186,6 +213,7 @@ export default function Index() {
             {[
               ["Услуги", "services"],
               ["Команда", "team"],
+              ["Контакты", "contacts"],
             ].map(([label, id]) => (
               <button
                 key={id}
@@ -211,7 +239,7 @@ export default function Index() {
             style={{ background: "var(--pf-surface)", borderTop: "1px solid var(--pf-border)", padding: "16px 24px" }}
             className="flex flex-col gap-4 md:hidden"
           >
-            {[["Услуги", "services"], ["Команда", "team"]].map(([label, id]) => (
+            {[["Услуги", "services"], ["Команда", "team"], ["Контакты", "contacts"]].map(([label, id]) => (
               <button
                 key={id}
                 onClick={() => scrollTo(id)}
@@ -228,7 +256,7 @@ export default function Index() {
       </nav>
 
       {/* ─── HERO ─── */}
-      <section id="hero" style={{ paddingTop: 120, paddingBottom: 80, position: "relative", overflow: "hidden" }}>
+      <section id="hero" style={{ paddingTop: "clamp(96px, 12vw, 140px)", paddingBottom: "clamp(48px, 6vw, 80px)", position: "relative", overflow: "hidden" }}>
         <CubeDecor size={200} rotate={15} opacity={0.06} className="animate-float" style={{ top: 80, right: "8%" }} />
         <CubeDecor size={120} rotate={-20} opacity={0.08} className="animate-float2" style={{ top: 200, right: "18%" }} />
         <CubeDecor size={64} rotate={40} opacity={0.1} className="animate-float3" style={{ top: 300, left: "5%" }} />
@@ -580,9 +608,180 @@ export default function Index() {
         </div>
       )}
 
+      {/* ─── CONTACTS ─── */}
+      <section id="contacts" style={{ padding: "64px 0", background: "var(--pf-surface)" }}>
+        <div className="max-w-3xl mx-auto px-6 text-center">
+          <div className="pf-badge mb-4" style={{ display: "inline-block" }}>Контакты</div>
+          <h2 className="section-title" style={{ fontSize: "clamp(26px, 4vw, 40px)", marginBottom: 8 }}>
+            СВЯЗАТЬСЯ С ВИКТОРОМ
+          </h2>
+          <p style={{ color: "var(--pf-text-muted)", fontFamily: "'IBM Plex Sans', sans-serif", fontSize: 15, marginBottom: 36 }}>
+            Пиши напрямую — отвечу быстро
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <a
+              href="https://t.me/xezzze228"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 12,
+                background: "rgba(74,222,128,0.08)", border: "2px solid var(--pf-green)",
+                color: "var(--pf-green)", padding: "16px 32px",
+                fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 16,
+                letterSpacing: "0.05em", textDecoration: "none",
+                transition: "all 0.15s",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = "var(--pf-green)";
+                (e.currentTarget as HTMLAnchorElement).style.color = "#0d1117";
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "4px 4px 0 rgba(74,222,128,0.3)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = "rgba(74,222,128,0.08)";
+                (e.currentTarget as HTMLAnchorElement).style.color = "var(--pf-green)";
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none";
+              }}
+            >
+              <span style={{ fontSize: 22 }}>✈️</span>
+              @xezzze228
+            </a>
+            <a
+              href="https://discord.com/users/xezze228"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 12,
+                background: "rgba(88,101,242,0.08)", border: "2px solid #5865F2",
+                color: "#7289da", padding: "16px 32px",
+                fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 16,
+                letterSpacing: "0.05em", textDecoration: "none",
+                transition: "all 0.15s",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = "#5865F2";
+                (e.currentTarget as HTMLAnchorElement).style.color = "#fff";
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "4px 4px 0 rgba(88,101,242,0.3)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = "rgba(88,101,242,0.08)";
+                (e.currentTarget as HTMLAnchorElement).style.color = "#7289da";
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none";
+              }}
+            >
+              <span style={{ fontSize: 22 }}>💬</span>
+              @xezze228
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── CHAT WIDGET ─── */}
+      <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 200 }}>
+        {/* Chat window */}
+        {chatOpen && (
+          <div style={{
+            position: "absolute", bottom: 72, right: 0,
+            width: "clamp(300px, 90vw, 360px)",
+            background: "var(--pf-surface)",
+            border: "2px solid var(--pf-green)",
+            boxShadow: "8px 8px 0 rgba(74,222,128,0.15)",
+            display: "flex", flexDirection: "column",
+            overflow: "hidden",
+          }}>
+            {/* Header */}
+            <div style={{
+              background: "var(--pf-surface2)", borderBottom: "2px solid var(--pf-border)",
+              padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between",
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{
+                  width: 36, height: 36, background: "rgba(74,222,128,0.1)",
+                  border: "2px solid var(--pf-green)", display: "flex", alignItems: "center",
+                  justifyContent: "center", fontSize: 18,
+                }}>⚒️</div>
+                <div>
+                  <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, fontSize: 14, color: "var(--pf-text)" }}>
+                    Виктор
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--pf-green)" }} />
+                    <span style={{ color: "var(--pf-green)", fontSize: 11, fontFamily: "'IBM Plex Sans', sans-serif" }}>
+                      онлайн
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <button onClick={() => setChatOpen(false)}
+                style={{ background: "transparent", border: "none", color: "var(--pf-text-muted)", cursor: "pointer" }}>
+                <Icon name="X" size={18} />
+              </button>
+            </div>
+
+            {/* Messages */}
+            <div style={{ height: 280, overflowY: "auto", padding: "12px 14px", display: "flex", flexDirection: "column", gap: 10 }}>
+              {chatMessages.map((msg, i) => (
+                <div key={i} style={{
+                  display: "flex", flexDirection: "column",
+                  alignItems: msg.from === "user" ? "flex-end" : "flex-start",
+                }}>
+                  <div style={{
+                    maxWidth: "80%", padding: "8px 12px",
+                    background: msg.from === "user" ? "var(--pf-green)" : "var(--pf-surface2)",
+                    color: msg.from === "user" ? "#0d1117" : "var(--pf-text)",
+                    border: `1px solid ${msg.from === "user" ? "var(--pf-green)" : "var(--pf-border)"}`,
+                    fontFamily: "'IBM Plex Sans', sans-serif", fontSize: 13, lineHeight: 1.5,
+                  }}>
+                    {msg.text}
+                  </div>
+                  <div style={{ color: "var(--pf-text-muted)", fontSize: 10, marginTop: 3, fontFamily: "'IBM Plex Sans', sans-serif" }}>
+                    {msg.time}
+                  </div>
+                </div>
+              ))}
+              <div ref={chatEndRef} />
+            </div>
+
+            {/* Input */}
+            <form onSubmit={sendMessage} style={{
+              borderTop: "2px solid var(--pf-border)",
+              display: "flex", gap: 0,
+            }}>
+              <input
+                className="pf-input"
+                placeholder="Написать сообщение..."
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                style={{ flex: 1, border: "none", borderRadius: 0 }}
+              />
+              <button type="submit" style={{
+                background: "var(--pf-green)", border: "none", cursor: "pointer",
+                padding: "0 16px", color: "#0d1117", flexShrink: 0,
+              }}>
+                <Icon name="Send" size={16} />
+              </button>
+            </form>
+          </div>
+        )}
+
+        {/* Toggle button */}
+        <button
+          onClick={() => setChatOpen(!chatOpen)}
+          style={{
+            width: 56, height: 56, borderRadius: 0,
+            background: chatOpen ? "var(--pf-surface2)" : "var(--pf-green)",
+            border: `2px solid ${chatOpen ? "var(--pf-border)" : "var(--pf-green)"}`,
+            cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: "4px 4px 0 rgba(74,222,128,0.2)", transition: "all 0.15s",
+          }}
+        >
+          <Icon name={chatOpen ? "X" : "MessageCircle"} size={24}
+            style={{ color: chatOpen ? "var(--pf-text)" : "#0d1117" } as React.CSSProperties} />
+        </button>
+      </div>
+
       {/* ─── FOOTER ─── */}
-      <footer style={{ borderTop: "2px solid var(--pf-border)", padding: "32px 24px" }}>
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <footer style={{ borderTop: "2px solid var(--pf-border)", padding: "24px" }}>
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 700, fontSize: 20 }}>
             SKIN<span style={{ color: "var(--pf-green)" }}>CRAFT</span>
           </div>
