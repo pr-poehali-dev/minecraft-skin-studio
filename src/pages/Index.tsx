@@ -58,15 +58,8 @@ const SERVICES = [
     icon: "Layers",
     title: "Пакет скинов",
     desc: "3-5 скинов в едином стиле. Идеально для кланов и серверов.",
-    price: "от 499 ₽",
+    price: "от 200 ₽",
     color: "gold",
-  },
-  {
-    icon: "Crown",
-    title: "VIP-коллекция",
-    desc: "Эксклюзивная серия из 10 скинов с анимированными деталями и уникальной концепцией.",
-    price: "от 1490 ₽",
-    color: "green",
   },
   {
     icon: "RefreshCw",
@@ -101,62 +94,6 @@ const TEAM = [
   },
 ];
 
-const REVIEWS = [
-  {
-    name: "Кирилл М.",
-    rating: 5,
-    text: "Заказал скин воина — получил шедевр. Детали проработаны до каждого пикселя. Сервер просто в восторге!",
-    date: "15 апреля 2026",
-    verified: true,
-  },
-  {
-    name: "Настя_PVP",
-    rating: 5,
-    text: "Брала пакет для клана — 5 скинов за 2 дня. Все в едином стиле, ребята довольны. Буду заказывать ещё.",
-    date: "10 апреля 2026",
-    verified: true,
-  },
-  {
-    name: "SteveCraft",
-    rating: 4,
-    text: "Хороший уровень работ. Немного подольше ждал, зато результат стоит того. Рекомендую студию всем.",
-    date: "3 апреля 2026",
-    verified: true,
-  },
-  {
-    name: "Валентина К.",
-    rating: 5,
-    text: "Подарила скин сыну на день рождения — он был в шоке! Качество на высоте, оплата прошла легко.",
-    date: "28 марта 2026",
-    verified: true,
-  },
-  {
-    name: "Игорь_Dark",
-    rating: 5,
-    text: "Быстро, красиво, профессионально. Скин в стиле Dark Fantasy получился лучше, чем я представлял.",
-    date: "20 марта 2026",
-    verified: false,
-  },
-  {
-    name: "Арина С.",
-    rating: 4,
-    text: "Всё супер, но хотелось бы чуть больше вариантов цветовой палитры на выбор. Скин в итоге классный!",
-    date: "12 марта 2026",
-    verified: true,
-  },
-];
-
-function Stars({ count }: { count: number }) {
-  return (
-    <div className="flex gap-0.5">
-      {[1, 2, 3, 4, 5].map((i) => (
-        <span key={i} style={{ color: i <= count ? "var(--pf-gold)" : "var(--pf-stone)" }}>
-          ★
-        </span>
-      ))}
-    </div>
-  );
-}
 
 function CubeDecor({
   size = 48,
@@ -200,10 +137,6 @@ export default function Index() {
       ? PORTFOLIO_IMAGES
       : PORTFOLIO_IMAGES.filter((p) => p.category === activeFilter);
 
-  const avgRating = (
-    REVIEWS.reduce((s, r) => s + r.rating, 0) / REVIEWS.length
-  ).toFixed(1);
-
   function scrollTo(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     setMenuOpen(false);
@@ -246,7 +179,6 @@ export default function Index() {
               ["Услуги", "services"],
               ["Портфолио", "portfolio"],
               ["Команда", "team"],
-              ["Отзывы", "reviews"],
             ].map(([label, id]) => (
               <button
                 key={id}
@@ -272,7 +204,7 @@ export default function Index() {
             style={{ background: "var(--pf-surface)", borderTop: "1px solid var(--pf-border)", padding: "16px 24px" }}
             className="flex flex-col gap-4 md:hidden"
           >
-            {[["Услуги", "services"], ["Портфолио", "portfolio"], ["Команда", "team"], ["Отзывы", "reviews"]].map(([label, id]) => (
+            {[["Услуги", "services"], ["Портфолио", "portfolio"], ["Команда", "team"]].map(([label, id]) => (
               <button
                 key={id}
                 onClick={() => scrollTo(id)}
@@ -579,75 +511,6 @@ export default function Index() {
                     <div style={{ color: "var(--pf-text-muted)", fontSize: 11 }}>в профессии</div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── REVIEWS ─── */}
-      <section id="reviews" style={{ padding: "80px 0" }}>
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-            <div>
-              <div className="pf-badge mb-3" style={{ display: "inline-block" }}>Отзывы</div>
-              <h2 className="section-title" style={{ fontSize: "clamp(28px, 4vw, 44px)" }}>
-                ЧТО ГОВОРЯТ КЛИЕНТЫ
-              </h2>
-            </div>
-            <div
-              style={{
-                background: "var(--pf-surface2)", border: "2px solid var(--pf-gold)",
-                padding: "16px 24px", display: "flex", alignItems: "center", gap: 16, flexShrink: 0,
-              }}
-            >
-              <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 700, fontSize: 40, color: "var(--pf-gold)" }}>
-                {avgRating}
-              </div>
-              <div>
-                <div className="flex gap-0.5 mb-1">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <span key={i} style={{ color: "var(--pf-gold)", fontSize: 18 }}>★</span>
-                  ))}
-                </div>
-                <div style={{ color: "var(--pf-text-muted)", fontSize: 13 }}>{REVIEWS.length} отзывов</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {REVIEWS.map((r, i) => (
-              <div
-                key={i}
-                style={{
-                  background: "var(--pf-surface)",
-                  border: "2px solid var(--pf-border)",
-                  padding: "24px",
-                }}
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <div style={{ fontFamily: "'Oswald', sans-serif", fontWeight: 600, color: "var(--pf-text)", fontSize: 16 }}>
-                      {r.name}
-                      {r.verified && (
-                        <span
-                          style={{
-                            marginLeft: 6, fontSize: 10, color: "var(--pf-green)",
-                            background: "rgba(74,222,128,0.1)", border: "1px solid var(--pf-green)",
-                            padding: "1px 6px", fontFamily: "'IBM Plex Sans', sans-serif", fontWeight: 500,
-                          }}
-                        >
-                          ✓
-                        </span>
-                      )}
-                    </div>
-                    <div style={{ color: "var(--pf-text-muted)", fontSize: 11, marginTop: 2 }}>{r.date}</div>
-                  </div>
-                  <Stars count={r.rating} />
-                </div>
-                <p style={{ color: "var(--pf-text-muted)", fontSize: 14, lineHeight: 1.65, fontFamily: "'IBM Plex Sans', sans-serif" }}>
-                  "{r.text}"
-                </p>
               </div>
             ))}
           </div>
